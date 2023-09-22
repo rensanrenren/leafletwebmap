@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sample Map</title>
+    <!-- LeafletのCSS読み込み -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- LeafletのCSS読み込み -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+</head>
+<body>
+    <!--地図を表示するdiv宣言-->
+    <div id="map" style="height: 80vh;"></div>
+
+    <script>
+        //地図インスタンスを初期化(=div要素に地図画面が埋め込まれるようになる)
+        const map = L.map('map', {
+            center: [36.4, 139.1], //初期表示の地図中心の[緯度,経度]
+            zoom: 5, //初期ズームレベル
+        });
+
+        //背景レイヤーインスタンス初期化(背景の初期条件を決めるのだと思う)
+        const backgroundLayer = L.tileLayer(
+            'https://tile.openstreetmap.jp/{z}/{x}/{y}.png', //OSMのタイルテンプレート
+            {
+                maxZoom: 19, 
+                attribution: 
+                '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+
+            },
+        );
+
+        //地図インスタンスレイヤーへ追加
+        map.addLayer(backgroundLayer);
+
+
+        //平面直角座標19系を地図上にピンで表示する
+        L.marker([33, 129.5]).bindPopup('平面直角座標1系原点').addTo(map);
+        L.marker([33, 131.0]).bindPopup('平面直角座標2系原点').addTo(map);
+        L.marker([36, 132.1666666]).bindPopup('平面直角座標3系原点').addTo(map);
+        L.marker([33, 133.5]).bindPopup('平面直角座標4系原点').addTo(map);
+        L.marker([36, 134.3333333]).bindPopup('平面直角座標5系原点').addTo(map);
+        L.marker([36, 136.0]).bindPopup('平面直角座標6系原点').addTo(map);
+        L.marker([36, 137.1666666]).bindPopup('平面直角座標7系原点').addTo(map);
+        L.marker([36, 138.5]).bindPopup('平面直角座標8系原点').addTo(map);
+        L.marker([36, 139.8333333]).bindPopup('平面直角座標9系原点').addTo(map);
+        L.marker([40, 140.8333333]).bindPopup('平面直角座標10系原点').addTo(map);
+        L.marker([44, 140.25]).bindPopup('平面直角座標11系原点').addTo(map);
+        L.marker([44, 142.25]).bindPopup('平面直角座標12系原点').addTo(map);
+        L.marker([44, 144.25]).bindPopup('平面直角座標13系原点').addTo(map);
+        L.marker([26, 142.0]).bindPopup('平面直角座標14系原点').addTo(map);
+        L.marker([26, 127.5]).bindPopup('平面直角座標15系原点').addTo(map);
+        L.marker([26, 124.0]).bindPopup('平面直角座標16系原点').addTo(map);
+        L.marker([26, 131.0]).bindPopup('平面直角座標17系原点').addTo(map);
+        L.marker([20, 136.0]).bindPopup('平面直角座標18系原点').addTo(map);
+        L.marker([26, 154.0]).bindPopup('平面直角座標19系原点').addTo(map);
+
+        //家を表示 35.46566,139.61637
+        L.marker([35.46566,139.61637]).bindPopup('ブランズ横浜').addTo(map);
+
+        //GeoJSONレイヤーを作成
+        fetch('./P29-21_10.geojson') //群馬県の学校データのGeoJSONを非同期読み込み
+           .then((res) => res.json())
+           .then((json) => {
+            //GeoJSONレイヤーを作成
+            L.geoJSON(json)
+               .bindPopup((layer) => layer.feature.properties.P29_004) //ポップアップで学校名を表示
+               .addTo(map); //地図に追加
+           });
+
+
+
+    </script>
+
+</body>
+</html>
